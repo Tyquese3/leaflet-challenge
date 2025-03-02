@@ -1,11 +1,13 @@
+console.log("Step 2 working");
 // Create the 'basemap' tile layer that will be the background of our map.
-L.tileLayer('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.geojson')
+L.tileLayer( "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'", 
+{ attribution: 'Map data: &amp;copy; &lt;a href="https://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://viewfinderpanoramas.org"&gt;SRTM&lt;/a&gt; | Map style: &amp;copy; &lt;a href="https://opentopomap.org"&gt;OpenTopoMap&lt;/a&gt; (&lt;a href="https://creativecommons.org/licenses/by-sa/3.0/"&gt;CC-BY-SA&lt;/a&gt;)', });
 
 // OPTIONAL: Step 2
 // Create the 'street' tile layer as a second background of the map
 
 // Create the map object with center and zoom options.
-var map = L.map('map').setView([-116.7304993,34.2869987], 12);
+var map = L.map('map').setView([34.2869987, -116.7304993], 12);
 
 // Then add the 'basemap' tile layer to the map.
 L.tileLayer('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.geojson').addTo(map);
@@ -28,7 +30,7 @@ L.tileLayer('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.
 // )}
   
 // Make a request that retrieves the earthquake geoJSON data.
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function (data) {
+data=d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function (data) {
 
   // This function returns the style data for each of the earthquakes we plot on the map.
   function styleInfo(feature) {
@@ -68,7 +70,7 @@ console.log(data)
 
     },
     // Set the style for each circleMarker using our styleInfo function.
-    style: styleInfo,
+    style: styleInfo(feature),
     radius: getRadius(quake.magnitude), // Calculate radius based on magnitude
     fillColor: getColor(quake.depth),   // Get color based on depth
     color: '#000',                      // Border color
@@ -112,11 +114,11 @@ if (depth > 35) {
   };
   // Finally, add the legend to the map.
   L.control({ position: 'bottomright' });
-  legend.onAdd = function (myMap) {
-    let div = L.DomUtil.create('div', 'legend');
-    let colors = ["#98EE00", "#D4EE00", "#EECC00", "#EE9C00", "#EA822C", "#EA2C2C"];
-    let labels = ["-10-10", "10-30", "30-50", "50-70", "70-90", "90+"];
-    legend.addTo(myMap);
+  // legend.onAdd = function (myMap) {
+  //   let div = L.DomUtil.create('div', 'legend');
+  //   let colors = ["#98EE00", "#D4EE00", "#EECC00", "#EE9C00", "#EA822C", "#EA2C2C"];
+  //   let labels = ["-10-10", "10-30", "30-50", "50-70", "70-90", "90+"];
+    legend.addTo(map);
 
   // OPTIONAL: Step 2
   // Make a request to get our Tectonic Plate geoJSON data.
@@ -127,4 +129,4 @@ if (depth > 35) {
     // Then add the tectonic_plates layer to the map.
 
   });
-};
+
